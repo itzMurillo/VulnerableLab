@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Demonstração XSS</title>
+</head>
+<body>
+  <h1>Demonstração conceitual de XSS</h1>
+  <p>Esta página renderiza conteúdo do usuário sem interpretar HTML.</p>
+
+  <label>Comentário:</label>
+  <input id="comment" value="Texto comum do usuário" />
+  <button onclick="renderizar()">Renderizar</button>
+
+  <h2>Resultado</h2>
+  <div id="safeOutput"></div>
+
+  <script>
+    function renderizar() {
+      const valor = document.getElementById("comment").value;
+      document.getElementById("safeOutput").textContent = valor;
+    }
+  </script>
+</body>
+</html>

@@ -1,6 +1,7 @@
 package br.unipar.frameworks.controller;
 
 import br.unipar.frameworks.dto.CommentRequest;
+import br.unipar.frameworks.dto.CommentResponse;
 import br.unipar.frameworks.model.Comment;
 import br.unipar.frameworks.model.Product;
 import br.unipar.frameworks.repository.CommentRepository;
@@ -24,16 +25,18 @@ public class CommentController {
     }
 
     @GetMapping("/product/{productId}")
-    public List<Comment> listByProduct(@PathVariable Long productId) {
-        return commentRepository.findByProductId(productId);
+    public List<CommentResponse> listByProduct(@PathVariable Long productId) {
+        return commentRepository.findByProductId(productId).stream()
+                .map(CommentResponse::from)
+                .toList();
     }
 
     @PostMapping
-    public Comment create(@Valid @RequestBody CommentRequest request) {
+    public CommentResponse create(@Valid @RequestBody CommentRequest request) {
         Product product = productRepository.findById(request.productId()).orElseThrow();
         Comment comment = new Comment();
         comment.setText(HtmlUtils.htmlEscape(request.text()));
         comment.setProduct(product);
-        return commentRepository.save(comment);
+        return CommentResponse.from(commentRepository.save(comment));
     }
 }
